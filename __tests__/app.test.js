@@ -59,7 +59,7 @@ describe("GET /api/articles/", () => {
         });
       });
   });
-  test.only("status 200 responds with articles with article_id only", () => {
+  test("status 200 responds with articles with article_id only", () => {
     return request(app)
       .get("/api/articles/4")
       .expect(200)
@@ -72,6 +72,26 @@ describe("GET /api/articles/", () => {
           body: "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
           created_at: "2020-05-06T01:14:00.000Z",
           votes: 0,
+        });
+      });
+  });
+});
+
+describe.only("GET /api/users", () => {
+  test("status 200 responds with users", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.users).toHaveLength(4);
+        body.users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
         });
       });
   });

@@ -3,7 +3,7 @@ const db = require("../db/connection");
 function selectArticle() {
   const sqlString = `SELECT * FROM articles;`;
   return db.query(sqlString).then((result) => {
-    console.log(result.rows);
+    
     return result.rows;
   });
 }
