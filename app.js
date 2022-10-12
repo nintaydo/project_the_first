@@ -4,19 +4,22 @@ const { getTopic } = require("./controllers/topic.controller");
 const {
   getArticle,
   getArticleById,
-} = require("./controllers/articles.controller");
+} = require("./controllers/articles.controller")
+const { getUsers } = require("./controllers/users.controller");
 
 const app = express();
 
 app.use(express.json());
 
-app.get("/api/topics", getTopic);
+app.get(`/api/topics`, getTopic);
 
-app.get("/api/articles", getArticle);
+app.get(`/api/articles`, getArticle);
 
 app.get(`/api/articles/:article_id`, getArticleById);
 
-app.all("/*", (request, response) => {
+app.get(`/api/users`, getUsers)
+
+app.all(`/*`, (request, response) => {
   response.status(404).send({ msg: "Invalid Path" });
 });
 
@@ -37,7 +40,7 @@ app.use((err, request, response, next) => {
 });
 
 app.use((err, request, response, next) => {
-  console.log(err);
+  
   res.sendStatus(500);
 });
 
