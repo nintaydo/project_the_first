@@ -4,6 +4,7 @@ const { getTopic } = require("./controllers/topic.controller");
 const {
   getArticle,
   getArticleById,
+  patchArticleById
 } = require("./controllers/articles.controller")
 const { getUsers } = require("./controllers/users.controller");
 
@@ -18,6 +19,8 @@ app.get(`/api/articles`, getArticle);
 app.get(`/api/articles/:article_id`, getArticleById);
 
 app.get(`/api/users`, getUsers)
+
+app.patch(`/api/articles/:article_id`, patchArticleById)
 
 app.all(`/*`, (request, response) => {
   response.status(404).send({ msg: "Invalid Path" });

@@ -75,9 +75,13 @@ describe("GET /api/articles/", () => {
         });
       });
   });
-});
+  // test("status 200 responds with articles and new comment_count with number of comments made by article_id", () => {
+  //   return request(app)
+  //   .get()
+  // })
+// });
 
-describe.only("GET /api/users", () => {
+describe("GET /api/users", () => {
   test("status 200 responds with users", () => {
     return request(app)
       .get("/api/users")
@@ -96,3 +100,23 @@ describe.only("GET /api/users", () => {
       });
   });
 });
+
+describe.only('PATCH /api/articles/:article_id', () => {
+  test("status 200 responds with updated article", () => {
+    return request(app)
+    .patch('/api/articles/4')
+    .expect(200)
+    .then(({ body}) => {
+      expect(body.article).toEqual({
+        article_id: 4,
+        title: "Student SUES Mitch!",
+        topic: "mitch",
+        author: "rogersop",
+        body: "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
+        created_at: "2020-05-06T01:14:00.000Z",
+        votes: 100,
+      })
+    })
+})
+})
+})
