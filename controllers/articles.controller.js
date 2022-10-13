@@ -16,7 +16,7 @@ function getArticle(request, response, next) {
 
 function getArticleById(request, response, next) {
   const userArticle_id = request.params.article_id;
-  console.log(userArticle_id, "In the controller");
+
   selectArticleById(userArticle_id)
     .then((article) => {
       response.status(200).send({ article });
@@ -27,14 +27,12 @@ function getArticleById(request, response, next) {
 }
 
 function patchArticleById(request, response, next) {
-  
   const article_id = request.params.article_id;
-  const newVotes = 100
-  const votes = { inc_votes: newVotes}
+
+  const votes = request.body.inc_votes;
 
   updateArticleById(article_id, votes)
     .then((article) => {
-      
       response.status(200).send({ article });
     })
     .catch((err) => {

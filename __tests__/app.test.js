@@ -59,9 +59,9 @@ describe("GET /api/articles/", () => {
         });
       });
   });
-  test("status 200 responds with articles with article_id only", () => {
+  test("status 200 responds with articles with article_id only and returns comment_count as well", () => {
     return request(app)
-      .get("/api/articles/4")
+      .get("/api/articles/3")
       .expect(200)
       .then(({ body }) => {
         expect(body.article).toEqual({
@@ -72,6 +72,7 @@ describe("GET /api/articles/", () => {
           body: "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
           created_at: "2020-05-06T01:14:00.000Z",
           votes: 0,
+          comment_count: expect.any(String),
         });
       });
   });
@@ -79,44 +80,64 @@ describe("GET /api/articles/", () => {
   //   return request(app)
   //   .get()
   // })
-// });
+  // });
 
-describe("GET /api/users", () => {
-  test("status 200 responds with users", () => {
-    return request(app)
-      .get("/api/users")
-      .expect(200)
-      .then(({ body }) => {
-        expect(body.users).toHaveLength(4);
-        body.users.forEach((user) => {
-          expect(user).toEqual(
-            expect.objectContaining({
-              username: expect.any(String),
-              name: expect.any(String),
-              avatar_url: expect.any(String),
-            })
-          );
+  describe("GET /api/users", () => {
+    test("status 200 responds with users", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.users).toHaveLength(4);
+          body.users.forEach((user) => {
+            expect(user).toEqual(
+              expect.objectContaining({
+                username: expect.any(String),
+                name: expect.any(String),
+                avatar_url: expect.any(String),
+              })
+            );
+          });
         });
+    });
+  });
+
+  describe("PATCH /api/articles/:article_id", () => {
+    test("status 200 responds with updated article", () => {
+      return request(app)
+        .patch("/api/articles/4")
+        .send({ inc_votes: 100 })
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.article).toEqual({
+            article_id: 4,
+            title: "Student SUES Mitch!",
+            topic: "mitch",
+            author: "rogersop",
+            body: "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
+            created_at: "2020-05-06T01:14:00.000Z",
+            votes: 100,
+          });
+        });
+    });
+    test("status 400 Bad Request malformed body/ missing required fields", () => {
+      return request(app)
+        .patch("/api/articles/notanID")
+        .send({ inc_votes: 100 })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Invalid input");
+        });
+    });
+  });
+  test("status 400 incorrect type bad request", () => {
+    return request(app)
+      .patch("/api/articles/4")
+      .send({ inc_votes: "Banana" })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
+        expect(body.msg).toBe("Invalid input");
       });
   });
 });
-
-describe.only('PATCH /api/articles/:article_id', () => {
-  test("status 200 responds with updated article", () => {
-    return request(app)
-    .patch('/api/articles/4')
-    .expect(200)
-    .then(({ body}) => {
-      expect(body.article).toEqual({
-        article_id: 4,
-        title: "Student SUES Mitch!",
-        topic: "mitch",
-        author: "rogersop",
-        body: "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
-        created_at: "2020-05-06T01:14:00.000Z",
-        votes: 100,
-      })
-    })
-})
-})
-})

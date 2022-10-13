@@ -9,25 +9,23 @@ function selectArticle() {
 
 function selectArticleById(article_id) {
   return db
-    .query(`SELECT * FROM articles
-    JOIN comments ON  WHERE article_id = $1`, [article_id])
+    .query(
+      `SELECT articles.*, COUNT(comments.article_id) AS comment_count FROM articles
+    LEFT JOIN comments ON  articles.author = comments.author
+    GROUP BY articles.article_id;`
+    )
     .then(({ rows }) => {
       return rows[0];
     });
 }
 
 function updateArticleById(article_id, votes) {
-  
-  newVotes = 100
-  votes = { inc_votes: newVotes };
-  console.log(newVotes, "second in model");
   return db
-    .query(`UPDATE articles SET votes = $1 WHERE article_id = $2 RETURNING *;`, [
-      newVotes,
-      article_id,
-    ])
+    .query(
+      `UPDATE articles SET votes = $1 WHERE article_id = $2 RETURNING *;`,
+      [votes, article_id]
+    )
     .then(({ rows }) => {
-      
       return rows[0];
     });
 }
