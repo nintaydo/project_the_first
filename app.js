@@ -4,8 +4,8 @@ const { getTopic } = require("./controllers/topic.controller");
 const {
   getArticle,
   getArticleById,
-  patchArticleById
-} = require("./controllers/articles.controller")
+  patchArticleById,
+} = require("./controllers/articles.controller");
 const { getUsers } = require("./controllers/users.controller");
 
 const app = express();
@@ -18,9 +18,9 @@ app.get(`/api/articles`, getArticle);
 
 app.get(`/api/articles/:article_id`, getArticleById);
 
-app.get(`/api/users`, getUsers)
+app.get(`/api/users`, getUsers);
 
-app.patch(`/api/articles/:article_id`, patchArticleById)
+app.patch(`/api/articles/:article_id`, patchArticleById);
 
 app.all(`/*`, (request, response) => {
   response.status(404).send({ msg: "Invalid Path" });
@@ -28,7 +28,7 @@ app.all(`/*`, (request, response) => {
 
 app.use((err, request, response, next) => {
   if (err.code === "22P02") {
-    response.status(400).send({ msg: "Invalid id" });
+    response.status(400).send({ msg: "Invalid input" });
   } else {
     next(err);
   }
@@ -43,7 +43,6 @@ app.use((err, request, response, next) => {
 });
 
 app.use((err, request, response, next) => {
-  
   res.sendStatus(500);
 });
 
