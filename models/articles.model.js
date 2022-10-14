@@ -1,18 +1,34 @@
 const db = require("../db/connection");
 
-function selectArticle() {
-  const sqlString = `SELECT * FROM articles;`;
-  return db.query(sqlString).then((result) => {
-    return result.rows;
-  });
+function selectArticle(topic) {
+  let querystr = `SELECT articles.*, COUNT(comments.article_id) AS comment_count FROM articles
+  LEFT JOIN comments ON articles.author = comments.author`;
+
+  const newArray = [];
+  if (topic) {
+    newArray.push(topic);
+    querystr += ` WHERE articles.topic = $1`;
+  }
+
+  querystr += ` GROUP BY articles.article_id
+  ORDER BY created_at DESC;`;
+
+  return db
+    .query(querystr, newArray)
+
+    .then((result) => {
+      return result.rows[0];
+    });
 }
 
-function selectArticleById(article_id) {
+function selectArticleById(userArticle_id) {
   return db
     .query(
       `SELECT articles.*, COUNT(comments.article_id) AS comment_count FROM articles
-    LEFT JOIN comments ON  articles.author = comments.author
-    GROUP BY articles.article_id;`
+    LEFT JOIN comments ON articles.author = comments.author
+    WHERE articles.article_id = $1
+    GROUP BY articles.article_id;`,
+      [userArticle_id]
     )
     .then(({ rows }) => {
       return rows[0];
