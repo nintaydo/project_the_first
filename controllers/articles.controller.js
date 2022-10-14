@@ -5,7 +5,10 @@ const {
 } = require("../models/articles.model");
 
 function getArticle(request, response, next) {
-  selectArticle()
+  
+  const  topic  = request.query.topic
+  
+  selectArticle(topic)
     .then((articles) => {
       response.status(200).send({ articles });
     })
@@ -15,8 +18,7 @@ function getArticle(request, response, next) {
 }
 
 function getArticleById(request, response, next) {
-  const userArticle_id = request.params.article_id;
-
+  const userArticle_id = request.params.userArticle_id;
   selectArticleById(userArticle_id)
     .then((article) => {
       response.status(200).send({ article });

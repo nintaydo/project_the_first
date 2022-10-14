@@ -12,11 +12,10 @@ const app = express();
 
 app.use(express.json());
 
-app.get(`/api/topics`, getTopic);
 
 app.get(`/api/articles`, getArticle);
 
-app.get(`/api/articles/:article_id`, getArticleById);
+app.get(`/api/articles/:userArticle_id`, getArticleById);
 
 app.get(`/api/users`, getUsers);
 
@@ -36,6 +35,7 @@ app.use((err, request, response, next) => {
 
 app.use((err, request, response, next) => {
   if (err.status) {
+    
     response.status(err.status).send({ msg: err.message });
   } else {
     next(err);
@@ -43,7 +43,8 @@ app.use((err, request, response, next) => {
 });
 
 app.use((err, request, response, next) => {
-  res.sendStatus(500);
+  
+  response.sendStatus(500);
 });
 
 // app.use((err, request, response, nest) => {

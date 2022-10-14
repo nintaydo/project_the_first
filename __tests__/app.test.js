@@ -61,21 +61,38 @@ describe("GET /api/articles/", () => {
   });
   test("status 200 responds with articles with article_id only and returns comment_count as well", () => {
     return request(app)
-      .get("/api/articles/3")
+      .get("/api/articles/4")
       .expect(200)
       .then(({ body }) => {
-        expect(body.article).toEqual({
-          article_id: 4,
-          title: "Student SUES Mitch!",
-          topic: "mitch",
-          author: "rogersop",
-          body: "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
-          created_at: "2020-05-06T01:14:00.000Z",
-          votes: 0,
-          comment_count: expect.any(String),
+        expect(body.article).toEqual({title: "Student SUES Mitch!",
+        article_id: 4,
+        topic: "mitch",
+        author: "rogersop",
+        body: "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
+        created_at: expect.any(String),
+        votes: 0,
+        comment_count: expect.any(String)
         });
       });
   });
+  test.only("status 200 responds with articles that match the topic if a topic is sent", ()=> {
+    return request(app)
+     .get("/api/articles?topic=mitch")
+     .expect(200)
+     .then(({body}) => {
+      expect(body.articles).toEqual({article_id: 3,
+        title: 'Eight pug gifs that remind me of mitch',
+        topic: 'mitch',
+        author: 'icellusedkars',
+        body: 'some gifs',
+        created_at: "2020-11-03T09:12:00.000Z",
+        votes: 0,
+        comment_count: '13'
+
+      })
+     })
+  })
+});
   // test("status 200 responds with articles and new comment_count with number of comments made by article_id", () => {
   //   return request(app)
   //   .get()
@@ -140,4 +157,4 @@ describe("GET /api/articles/", () => {
         expect(body.msg).toBe("Invalid input");
       });
   });
-});
+
