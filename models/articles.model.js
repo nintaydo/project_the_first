@@ -3,11 +3,11 @@ const db = require("../db/connection");
 function selectArticle(topic) {
   let querystr = `SELECT articles.*, COUNT(comments.article_id) AS comment_count FROM articles
   LEFT JOIN comments ON articles.author = comments.author`;
-
+console.log(topic, "<----Higher in model")
   const newArray = [];
   if (topic) {
     newArray.push(topic);
-    querystr += ` WHERE articles.topic = $1`;
+    querystr += ` WHERE topic = $1`;
   }
 
   querystr += ` GROUP BY articles.article_id
@@ -17,7 +17,8 @@ function selectArticle(topic) {
     .query(querystr, newArray)
 
     .then((result) => {
-      return result.rows[0];
+      console.log(result.rows, "<----model")
+      return result.rows;
     });
 }
 

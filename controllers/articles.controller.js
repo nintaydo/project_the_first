@@ -5,10 +5,8 @@ const {
 } = require("../models/articles.model");
 
 function getArticle(request, response, next) {
-  
-  const  topic  = request.query.topic
-  
-  selectArticle(topic)
+  console.log(request.query.topic, "<----First in control")
+  selectArticle(request.query.topic)
     .then((articles) => {
       response.status(200).send({ articles });
     })
