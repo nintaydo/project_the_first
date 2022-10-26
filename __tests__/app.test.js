@@ -53,7 +53,7 @@ describe("GET /api/articles/", () => {
               author: expect.any(String),
               body: expect.any(String),
               created_at: expect.any(String),
-              votes: expect.any(Number),
+              votes: expect.any(Number)
             })
           );
         });
@@ -75,24 +75,30 @@ describe("GET /api/articles/", () => {
         });
       });
   });
+
   test.only("status 200 responds with articles that match the topic if a topic is sent", ()=> {
     return request(app)
      .get("/api/articles?topic=mitch")
      .expect(200)
      .then(({body}) => {
-      expect(body.articles).toEqual({article_id: 3,
-        title: 'Eight pug gifs that remind me of mitch',
-        topic: 'mitch',
-        author: 'icellusedkars',
-        body: 'some gifs',
-        created_at: "2020-11-03T09:12:00.000Z",
-        votes: 0,
-        comment_count: '13'
+      expect(body.articles).toHaveLength(11);
+        body.articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: "mitch",
+              author: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              comment_count: expect.any(String),
+              votes: expect.any(Number)
+            })
+        )})
 
-      })
-     })
   })
 });
+
   // test("status 200 responds with articles and new comment_count with number of comments made by article_id", () => {
   //   return request(app)
   //   .get()
@@ -157,4 +163,4 @@ describe("GET /api/articles/", () => {
         expect(body.msg).toBe("Invalid input");
       });
   });
-
+});

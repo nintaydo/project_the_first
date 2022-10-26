@@ -12,6 +12,7 @@ const app = express();
 
 app.use(express.json());
 
+app.get('/api/topics', getTopic)
 
 app.get(`/api/articles`, getArticle);
 
